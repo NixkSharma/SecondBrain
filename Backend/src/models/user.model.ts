@@ -1,14 +1,14 @@
 import { model, Schema, Document } from "mongoose";
 import { hash, compare } from "bcryptjs";
 
-interface UserInterface extends Document{
+interface UserModelInterface extends Document{
     username : string,
     password : string,
     createHash(password : string) : Promise<string>,
     validatePassword(password : string) : Promise<boolean>
 }
 
-const UserSchema : Schema<UserInterface> = new Schema({
+const UserModelSchema : Schema<UserInterface> = new Schema({
     username : {
         type : String,
         required : [true, "Username is required"],
@@ -34,13 +34,13 @@ const UserSchema : Schema<UserInterface> = new Schema({
 //     }  
 // });
 
-UserSchema.methods.createHash = async function(password:string) {
+UserModelSchema.methods.createHash = async function(password:string) {
     const saltRounds = 10;
     return await hash(password, saltRounds);
 }
 
-UserSchema.methods.validatePassword = async function(password : string) {
+UserModelSchema.methods.validatePassword = async function(password : string) {
     return await compare(password, this.password);
 };
 
-export const User = model<UserInterface>('Users', UserSchema);
+export const User = model<UserModelInterface>('Users', UserModelSchema);
