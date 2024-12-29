@@ -22,7 +22,7 @@ export const SignupSchema = z.object({
     }
 )
 
-export type TSignupSchema = z.infer<typeof SignupSchema>
+type TSignupSchema = z.infer<typeof SignupSchema>
 
 export const SigninSchema = z.object({
     username : z
@@ -34,4 +34,4 @@ export const SigninSchema = z.object({
         .min(8, "Password should be atleast 8 characters long")
 });
 
-export type TSigninSchema = z.infer<typeof SigninSchema>
+type TSigninSchema = z.infer<typeof SigninSchema>

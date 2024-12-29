@@ -8,7 +8,7 @@ interface UserModelInterface extends Document{
     validatePassword(password : string) : Promise<boolean>
 }
 
-const UserModelSchema : Schema<UserInterface> = new Schema({
+const UserModelSchema : Schema<UserModelInterface> = new Schema({
     username : {
         type : String,
         required : [true, "Username is required"],

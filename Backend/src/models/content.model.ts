@@ -16,14 +16,12 @@ const ContentModelSchema = new Schema({
         required : true
     },
     tags : {
-        type : [{
-            type : Schema.Types.ObjectId,
-            ref : 'tag'
-        }],
+        type : [Schema.Types.ObjectId],
+        ref : 'Users'
     }, 
     userId : {
         type : Schema.Types.ObjectId,
-        ref : 'User',
+        ref : 'Users',
         required : true
     }, 
     content : {

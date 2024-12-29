@@ -8,7 +8,7 @@ const linkModelSchema = new Schema({
     },
     userId : {
         type : Schema.Types.ObjectId,
-        ref : 'User',
+        ref : 'Users',
         unique : true, 
         required : true
     }
