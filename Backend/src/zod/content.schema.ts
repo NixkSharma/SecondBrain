@@ -1,3 +1,4 @@
+import { isValidObjectId, Schema } from "mongoose";
 import { Types } from "../enums/types.enum";
 import { z } from "zod";
 
@@ -23,4 +24,15 @@ export const ContentSchema = z.object({
     tags : z
         .array(z.string().trim().toLowerCase().max(20, {message : "Tag must atmost contain 20 characters"}))
         .optional()
+});
+
+export const deleteContentSchema = z.object({
+    contentId : z
+        .string()
+        .refine(
+            id => isValidObjectId(id),
+            {
+                message : "ContentId is not valid"
+            }
+        )
 });

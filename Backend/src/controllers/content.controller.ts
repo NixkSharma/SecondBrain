@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { ContentSchema } from "../zod/content.schema";
+import { ContentSchema, deleteContentSchema } from "../zod/content.schema";
 import { Tag } from "../models/tag.model";
 import { Content } from "../models/content.model";
 import { Types } from "mongoose";
@@ -8,7 +8,8 @@ export const createContent = async (req : Request, res : Response) : Promise<any
     const {success, error, data} = ContentSchema.safeParse(req.body);
     if(!success){
         return res.status(411).json({
-            message : error.issues[0].message
+            message : error?.issues[0].message,
+            path : error?.issues[0].path
         });
     }
     try{
@@ -37,3 +38,37 @@ export const createContent = async (req : Request, res : Response) : Promise<any
         });
     }
 }
+
+export const deleteContent = async (req : Request, res : Response) : Promise<any> => {
+    const {success, error, data} = deleteContentSchema.safeParse(req.body);
+    if(!success){
+        return res.status(411).json({
+            message : error?.issues[0].message,
+            path : error?.issues[0].path
+        });
+    }
+    try{
+        const { contentId } = data;
+        const userId = req.userId;
+        const content = await Content.findOne({_id : contentId});
+        if(!content){
+            return res.status(404).json({
+                message : "Content does exist [Invalid contentId]"
+            });
+        }
+        if(content.userId.toHexString() !== userId){
+            return res.status(401).json({
+                message : "User is not authorized to delete the content"
+            });
+        }
+        await Content.deleteOne({_id : contentId, userId})
+        return res.status(200).json({
+            message : "Content deleted Succesfully"
+        });
+    }catch(e){
+        console.log(e);
+        return res.status(500).json({
+            message : "Internal Server Error"
+        });
+    }    
+};
