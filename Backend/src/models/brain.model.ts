@@ -1,9 +1,10 @@
 import { Schema, model } from "mongoose";
 import { hash } from "bcryptjs";
+import { UserModelInterface } from "./user.model";
 
 interface ShareLinkInterface extends Document{
     hash : string, 
-    userId : Schema.Types.ObjectId,
+    userId : Schema.Types.ObjectId | UserModelInterface,
     createHash(length : number) : string
 }
 

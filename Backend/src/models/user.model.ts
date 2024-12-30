@@ -1,7 +1,7 @@
 import { model, Schema, Document } from "mongoose";
 import { hash, compare } from "bcryptjs";
 
-interface UserModelInterface extends Document{
+export interface UserModelInterface extends Document{
     username : string,
     password : string,
     createHash(password : string) : Promise<string>,
