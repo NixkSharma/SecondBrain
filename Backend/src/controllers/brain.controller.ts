@@ -11,30 +11,23 @@ export const shareLink = async (req : Request, res : Response) : Promise<any> =>
             path : error.issues[0].path
         });
     }
-    try{
-        const existingLink = await Link.findOne({userId : req.userId});
-        if(data.share){
-            if(!existingLink){
-                const existingLink = new Link({userId : req.userId});
-                existingLink.hash = existingLink.createHash(10);
-                await existingLink.save();
-            }
-            return res.status(200).json({
-                message : "Link created Successfully",
-                link : existingLink!.hash
-            });
-        }else{
-            if(existingLink){
-                await Link.deleteOne({userId : existingLink.userId});
-            }
-            return res.status(200).json({
-                message : "Link deleted successfully",
-            });
+    const existingLink = await Link.findOne({userId : req.userId});
+    if(data.share){
+        if(!existingLink){
+            const existingLink = new Link({userId : req.userId});
+            existingLink.hash = existingLink.createHash(10);
+            await existingLink.save();
         }
-    }catch(e){
-        console.log(e);
-        return res.status(500).json({
-            message : "Internal Server Error"
+        return res.status(200).json({
+            message : "Link created Successfully",
+            link : existingLink!.hash
+        });
+    }else{
+        if(existingLink){
+            await Link.deleteOne({userId : existingLink.userId});
+        }
+        return res.status(200).json({
+            message : "Link deleted successfully",
         });
     }
 }
