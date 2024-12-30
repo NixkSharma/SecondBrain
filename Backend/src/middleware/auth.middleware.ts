@@ -7,7 +7,7 @@ export const authMiddleware = async (req : Request, res : Response, next : NextF
     const token = req.headers['authorization']?.startsWith('Bearer ') ? req.headers['authorization'].split(' ')[1] : undefined;
     if(!token){
         return res.status(401).json({
-            message : "Token is invalid/expired"
+            message : "Token is not present"
         });
     }
     try{
@@ -16,7 +16,7 @@ export const authMiddleware = async (req : Request, res : Response, next : NextF
         next();
     }catch(e){
         return res.status(500).json({
-            message : "Internal Server Error"
+            message : "Token is invalid/expired"
         });
     }
 };

@@ -17,7 +17,7 @@ const ContentModelSchema = new Schema({
     },
     tags : {
         type : [Schema.Types.ObjectId],
-        ref : 'Users'
+        ref : 'Tags'
     }, 
     userId : {
         type : Schema.Types.ObjectId,

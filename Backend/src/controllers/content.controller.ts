@@ -72,3 +72,18 @@ export const deleteContent = async (req : Request, res : Response) : Promise<any
         });
     }    
 };
+
+export const fetchAllContent = async(req : Request, res : Response) : Promise<any> => {
+    try{
+        const userId = req.userId;
+        const allContent = await Content.find({userId}).populate('tags', 'title -_id').sort({createdAt : -1});
+        return res.status(200).json({
+            content : allContent
+        });
+    }catch(e){
+        console.log(e);
+        return res.status(500).json({
+            message : "Internal Server Error"
+        });
+    }
+};
