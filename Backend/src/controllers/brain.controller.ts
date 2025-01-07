@@ -50,3 +50,12 @@ export const getSharedBrain = async(req : Request, res : Response) : Promise<any
         content
     }); 
 };
+
+export const getAllSharedBrains = async(req : Request, res : Response) : Promise<any> => {
+    const sharedBrains = await Link.find({}).populate('userId', 'username').sort({ createdAt : -1 });
+    res.status(200).json({
+        success : true,
+        message : "Shared links fetched successfully",
+        data : sharedBrains
+    });
+};

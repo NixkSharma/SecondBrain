@@ -59,7 +59,7 @@ export const deleteContent = async (req : Request, res : Response) : Promise<any
     });  
 };
 
-export const fetchAllContent = async(req : Request, res : Response) : Promise<any> => {
+export const fetchContent = async(req : Request, res : Response) : Promise<any> => {
     const userId = req.userId;
     const allContent = await Content.find({userId}).populate('tags', 'title -_id').sort({createdAt : -1});
     return res.status(200).json({
