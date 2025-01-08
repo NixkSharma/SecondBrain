@@ -9,6 +9,7 @@ export const signup = async (req : Request, res : Response) : Promise<any> =>{
     const {success, data, error} = SignupSchema.safeParse(req.body);
     if(!success){
         return res.status(411).json({
+            success : false,
             message : error?.issues[0].message
         });   
     }
@@ -16,6 +17,7 @@ export const signup = async (req : Request, res : Response) : Promise<any> =>{
     let user= await User.findOne({username});
     if(user){
         return res.status(403).json({
+            success : false,
             message : "User already exists with this name"
         });
     }
@@ -23,7 +25,9 @@ export const signup = async (req : Request, res : Response) : Promise<any> =>{
     user.password = await user.createHash(user.password);
     await user.save();
     return res.status(200).json({
-        message: "Signed up"
+        success : true,
+        message: "Signed up",
+        data : user
     });
 };
 
@@ -31,6 +35,7 @@ export const signin = async(req : Request, res : Response) : Promise<any> =>{
     const {success, data, error} = SigninSchema.safeParse(req.body);
     if(!success){
         return res.status(411).json({
+            success : false,
             message : error?.issues[0].message
         });
     }
@@ -38,19 +43,37 @@ export const signin = async(req : Request, res : Response) : Promise<any> =>{
     const user = await User.findOne({username});
     if(!user){
         return res.status(404).json({
+            success : false,
             message : "User does not exist"
         });
     }
     if(await user.validatePassword(password)){
         const token = jwt.sign({userId : user._id}, JWT_SECRET, {expiresIn : '1h'});
         return res.status(200).json({
+            success : true,
             message : "Signed In",
-            token
+            data : token
         });
     }else{
         return res.status(411).json({
+            success : false,
             message : "Incorrect Password"
         });
     }
 };
 
+export const signout = async(req : Request, res : Response) : Promise<any> =>{
+    return res.status(200).json({
+        success : true,
+        message : "Successfully signed out",
+        data : ""
+    });
+};
+
+export const checkAuth = async (req: any, res: any) => {
+    res.status(200).json({
+        success: true,
+        isAuthenticated: true,
+        message: "User is authenticated",
+    });
+  };

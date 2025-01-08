@@ -20,7 +20,9 @@ const linkModelSchema = new Schema<ShareLinkInterface>({
         unique : true, 
         required : true
     }
-});
+},
+    { timestamps : true }
+);
 
 linkModelSchema.methods.createHash = function(length: number){
     const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
